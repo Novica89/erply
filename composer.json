@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-0": {
-            "novica89\\erply": "src/"
+            "Novica89\\Erply": "src/"
         }
     },
     "minimum-stability": "stable"
