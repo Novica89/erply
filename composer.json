@@ -1,0 +1,22 @@
+{
+    "name": "novica89/erply",
+    "description": "Laravel 5 package for interaction with Erply service API",
+    "type" : "library",
+    "licence" : "MIT",
+    "authors": [
+        {
+            "name": "Novica Vukobratovic",
+            "email": "vnovica@yahoo.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "novica89\\erply": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+
+}
