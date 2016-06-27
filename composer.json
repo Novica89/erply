@@ -1,6 +1,7 @@
 {
     "name": "novica89/erply",
     "description": "Laravel 5 package for interaction with Erply service API",
+    "keywords": ["erply", "api"]
     "type" : "library",
     "licence" : "MIT",
     "authors": [
