@@ -14,7 +14,7 @@ class ErplyServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'../config/erply.php' => config_path('erply.php'),
+            __DIR__.'/../config/erply.php' => config_path('erply.php'),
         ]);
     }
 
