@@ -14,8 +14,8 @@
         "php": ">=5.4.0"
     },
     "autoload": {
-        "psr-0": {
-            "Novica89\\Erply\\": "novica89/erply/src/"
+        "psr-4": {
+            "Novica89\\Erply\\": "src/"
         }
     },
     "minimum-stability": "stable"
