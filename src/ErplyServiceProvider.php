@@ -1,6 +1,4 @@
-<?php
-
-namespace Novica89\Erply;
+<?php namespace Novica89\Erply;
 
 use Illuminate\Support\ServiceProvider;
 
