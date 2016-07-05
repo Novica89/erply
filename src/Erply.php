@@ -129,7 +129,8 @@ class Erply {
         $this->requestStatus = true;
         $this->request_limit_reached_on = null;
 
-        if($error_code = $this->response()->status->errorCode > 0){
+        if(($error_code = $this->response()->status->errorCode) > 0){
+
             // if the error was because we hit the API request limit
             if($error_code == self::API_REQUEST_LIMIT_PER_HOUR_ERR_CODE) {
                 $this->request_limit_reached_on = date('Y-m-d h:i', time());
@@ -174,6 +175,15 @@ class Erply {
      */
     public function response() {
         return json_decode($this->response);
+    }
+
+    /**
+     * Get back only the original status from the response JSON
+     *
+     * @return mixed
+     */
+    public function responseStatus() {
+        return $this->response()->status;
     }
 
     /**
@@ -318,14 +328,17 @@ class Erply {
     }
 
     /**
-     * Throw Exception if the API limit date is 1 hour in the future ( there is 1000 API calls per hour limit )
+     * Set request status to FALSE if we are still in the "API limit reached zone".
+     * Erply API suggests waiting for 10 minutes between calls if the API limit is reached
      *
      * @throws Exception
      */
     protected function abortIfApiLimitReached()
     {
-        if($this->request_limit_reached_on && date('Y-m-d h:i', strtotime($this->request_limit_reached_on . " +1 hours")) > date('Y-m-d h:i', time())) {
-            throw new Exception('API request limit error reached on: ' . $this->request_limit_reached_on, self::API_REQUEST_LIMIT_PER_HOUR_ERR_CODE);
+        if($this->request_limit_reached_on && date('Y-m-d h:i', strtotime($this->request_limit_reached_on . " +10 minutes")) > date('Y-m-d h:i', time())) {
+            $this->requestStatus = false;
+            return $this;
+            //throw new Exception('API request limit error reached on: ' . $this->request_limit_reached_on, self::API_REQUEST_LIMIT_PER_HOUR_ERR_CODE);
         }
     }
 
