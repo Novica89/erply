@@ -1,6 +1,6 @@
 <?php namespace Novica89\Erply;
 
-use Exception;
+use Novica89\Erply\Exceptions\ErplySyncException;
 
 class Erply {
 
@@ -101,7 +101,7 @@ class Erply {
      * @param array $parameters
      *
      * @return mixed
-     * @throws Exception
+     * @throws ErplySyncException
      */
     public function request($request, $parameters = []) {
 
@@ -122,7 +122,7 @@ class Erply {
         if($error) {
             $this->requestStatus = false;
             //return $this;
-            throw new Exception('CURL error: '.$response.':'.$error.': '.$errorNumber, self::CURL_ERROR);
+            throw new ErplySyncException('CURL error: '.$response.':'.$error.': '.$errorNumber, self::CURL_ERROR);
         }
 
         $this->response = $response;
@@ -199,12 +199,12 @@ class Erply {
      * Get authorization key for Erply from session, or make an API call to Erply to generate new one if the current is not existent or invalid
      *
      * @return mixed
-     * @throws Exception
+     * @throws ErplySyncException
      */
     protected function getSessionKey()
     {
 
-        if( ! session()) throw new Exception('PHP session not started', self::PHP_SESSION_NOT_STARTED);
+        if( ! session()) throw new ErplySyncException('PHP session not started', self::PHP_SESSION_NOT_STARTED);
 
         if($this->authorizationKeyNotValid()) {
 
@@ -220,13 +220,13 @@ class Erply {
     }
 
     /**
-     * Check if all of the required fields are setup and if not, throw Exception
+     * Check if all of the required fields are setup and if not, throw ErplySyncException
      *
-     * @throws Exception
+     * @throws ErplySyncException
      */
     protected function abortIfSetupIncorrectly()
     {
-        if(! $this->username OR ! $this->password OR ! $this->clientCode OR ! $this->url) throw new Exception('Missing parameters', self::MISSING_PARAMETERS);
+        if(! $this->username OR ! $this->password OR ! $this->clientCode OR ! $this->url) throw new ErplySyncException('Missing parameters', self::MISSING_PARAMETERS);
     }
 
     /**
@@ -236,7 +236,7 @@ class Erply {
      * @param $parameters
      *
      * @return mixed
-     * @throws Exception
+     * @throws ErplySyncException
      */
     protected function addEssentialParameters($request, array $parameters = [])
     {
@@ -305,7 +305,7 @@ class Erply {
      * Make an Erply API call to get new authorization key so that we can set it in session
      *
      * @return mixed
-     * @throws Exception
+     * @throws ErplySyncException
      */
     protected function getNewAuthorizationKey()
     {
@@ -318,7 +318,7 @@ class Erply {
             session()->forget('EAPISessionKey.' . $this->clientCode . '.' . $this->username . '');
             session()->forget('EAPISessionKeyExpires.' . $this->clientCode . '.' . $this->username . '');
 
-            $e = new Exception('Verify user failure', self::VERIFY_USER_FAILURE);
+            $e = new ErplySyncException('Verify user failure', self::VERIFY_USER_FAILURE);
             $e->response = $response;
             throw $e;
 
@@ -331,14 +331,14 @@ class Erply {
      * Set request status to FALSE if we are still in the "API limit reached zone".
      * Erply API suggests waiting for 10 minutes between calls if the API limit is reached
      *
-     * @throws Exception
+     * @throws ErplySyncException
      */
     protected function abortIfApiLimitReached()
     {
         if($this->request_limit_reached_on && date('Y-m-d h:i', strtotime($this->request_limit_reached_on . " +10 minutes")) > date('Y-m-d h:i', time())) {
             $this->requestStatus = false;
             return $this;
-            //throw new Exception('API request limit error reached on: ' . $this->request_limit_reached_on, self::API_REQUEST_LIMIT_PER_HOUR_ERR_CODE);
+            //throw new ErplySyncException('API request limit error reached on: ' . $this->request_limit_reached_on, self::API_REQUEST_LIMIT_PER_HOUR_ERR_CODE);
         }
     }
 
