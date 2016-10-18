@@ -4,7 +4,7 @@ Manage Erply API calls to retrieve or create / update resources from and to Erpl
 #Compatibility
 This package has been used on a project based on Laravel 5.1. However, there should be no issue using it on newer versions of this framework
 
-##Installation
+#Installation
 
 Run `composer require novica89/erply dev-master` in root of your application
 
@@ -37,6 +37,6 @@ ERPLY_USER=your_erply_user
 ERPLY_PASS=your_erply_pass
 ERPLY_CLIENT_CODE=your_erply_client_code
 `
-## Usage
+# Usage
 
 To be added ...
