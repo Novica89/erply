@@ -187,6 +187,8 @@ class Erply {
      * @return mixed
      */
     public function responseStatus() {
+        if( ! property_exists($this->response(), 'status') ) return null;
+
         return $this->response()->status;
     }
 
@@ -196,6 +198,8 @@ class Erply {
      * @return mixed
      */
     public function records() {
+        if( ! property_exists($this->response(), 'records') ) return [];
+
         return $this->response()->records;
     }
 
