@@ -107,8 +107,6 @@ class Erply {
      */
     public function request($request, $parameters = []) {
 
-        $this->incrementApiRequestAttempt($request);
-
         $this->abortIfApiLimitReached();
 
         $this->abortIfSetupIncorrectly();
@@ -347,33 +345,6 @@ class Erply {
             $this->requestStatus = false;
             return $this;
             //throw new ErplySyncException('API request limit error reached on: ' . $this->request_limit_reached_on, self::API_REQUEST_LIMIT_PER_HOUR_ERR_CODE);
-        }
-    }
-
-    /**
-     * increment api request attempt
-     *
-     * @param String $request
-     * @return void
-     */
-    protected function incrementApiRequestAttempt($request)
-    {
-        // first check if table exists
-        $exists = DB::select("SHOW TABLES LIKE 'external_api_counters';");
-
-        if( ! $exists ) return;
-
-        // try to get row to increment
-        $date = DB::table('external_api_counters')
-                        ->where('created_at', 'LIKE', Carbon::now()->format('Y-m-d H:').'%')
-                        ->where('method', $request);
-
-        if( $date->get() ){
-            // row already exists, so just increment
-            $date->increment('count');
-        }else{
-            // row doesn't exits, so just insert new
-            DB::table('external_api_counters')->insert(['api'=>'erply', 'method'=>$request, 'count'=>1, 'created_at'=>Carbon::now()]);
         }
     }
 }
