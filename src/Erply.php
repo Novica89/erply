@@ -284,7 +284,14 @@ class Erply {
 
         //set up host and cert verification
         curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($handle, CURLOPT_SSLVERSION, 3);
+
+        /**
+         * NOTE on php.net
+         * http://php.net/manual/en/function.curl-setopt.php
+         * Your best bet is to not set this and let it use the default.
+         * Setting it to 2 or 3 is very dangerous given the known vulnerabilities in SSLv2 and SSLv3.
+         */
+        // curl_setopt($handle, CURLOPT_SSLVERSION, 3);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
 
         if($this->sslCACertPath) {
